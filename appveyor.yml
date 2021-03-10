@@ -17,7 +17,6 @@ skip_tags: true
 version: "{build}"
 
 deploy:
-  release: MultiplayerHC-v$(appveyor_build_version)
   provider: GitHub
   auth_token:
     secure: h0k3EFcI2oVZp614pFswIB19uHRqFdBhQheAhnZjipoLyjInl8R8wXuUeWFTlOY6
