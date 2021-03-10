@@ -1,0 +1,58 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group = 'moe.neat'
+version = '1.0-SNAPSHOT'
+
+sourceCompatibility = '11'
+targetCompatibility = '11'
+
+repositories {
+    mavenCentral()
+    maven {
+        name = 'papermc-repo'
+        url = 'https://papermc.io/repo/repository/maven-public/'
+    }
+    maven {
+        name = 'sonatype'
+        url = 'https://oss.sonatype.org/content/groups/public/'
+    }
+}
+
+dependencies {
+    compileOnly 'com.destroystokyo.paper:paper-api:1.16.5-R0.1-SNAPSHOT'
+}
+
+processResources {
+    from(sourceSets.main.resources.srcDirs) {
+        filter ReplaceTokens, tokens: [version: version]
+    }
+}
+
+application {
+    // Define the main class for the application.
+    mainClassName = 'moe.neat.multiplayerhc.standalone.Main'
+}
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'moe.neat.multiplayerhc.standalone.Main'
+        )
+    }
+}
+
+task finalize {
+    doLast {
+        copy {
+            from 'build/libs/multiplayer-hc-1.0-SNAPSHOT.jar'
+            into 'server/plugins'
+        }
+    }
+}
+
+build.finalizedBy(finalize)

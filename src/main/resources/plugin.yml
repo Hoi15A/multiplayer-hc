@@ -1,0 +1,8 @@
+name: MultiplayerHc
+version: @version@
+main: moe.neat.multiplayerhc.MultiplayerHc
+api-version: 1.16
+prefix: MP-HC
+authors: [ Austin_Albrecht ]
+description: Deletes the world whenever somebody dies
+load: STARTUP
