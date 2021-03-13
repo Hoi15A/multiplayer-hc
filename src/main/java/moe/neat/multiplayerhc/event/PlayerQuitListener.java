@@ -8,6 +8,11 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 public class PlayerQuitListener implements Listener {
 
+    /**
+     * Shuts down the server if the world is scheduled to reset and nobody else is online
+     *
+     * @param event
+     */
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
         if ("true".equals(ConfigManager.read("resetWorld"))) {

@@ -6,6 +6,9 @@ import moe.neat.multiplayerhc.event.PlayerQuitListener;
 import moe.neat.multiplayerhc.event.ServerListPingListener;
 import org.bukkit.plugin.java.JavaPlugin;
 
+/**
+ * Plugin entrypoint for Multiplayer Hardcore
+ */
 public final class MultiplayerHc extends JavaPlugin {
 
     @Override

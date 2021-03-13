@@ -11,6 +11,11 @@ import org.bukkit.event.server.ServerListPingEvent;
 
 public class ServerListPingListener implements Listener {
 
+    /**
+     * Returns an up to date motd to the player based on the config
+     *
+     * @param event
+     */
     @EventHandler
     public void onServerListPing(ServerListPingEvent event) {
         Component separator = Component.text(" | ", NamedTextColor.GRAY);

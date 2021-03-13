@@ -1,6 +1,5 @@
 package moe.neat.multiplayerhc.event;
 
-import com.google.gson.Gson;
 import moe.neat.multiplayerhc.ConfigManager;
 import moe.neat.multiplayerhc.MultiplayerHc;
 import net.kyori.adventure.key.Key;
@@ -21,9 +20,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -68,11 +65,17 @@ public class PlayerDeathListener implements Listener {
 
                 Bukkit.shutdown();
             }
-        }.runTaskLater(MultiplayerHc.getPlugin(MultiplayerHc.class), 20*60/*6*/);
+        }.runTaskLater(MultiplayerHc.getPlugin(MultiplayerHc.class), 20*60*6);
 
 
     }
 
+    /**
+     * Sets all relevant config values so that standalone can reset the world and the motd is updated.
+     *
+     * @param event
+     * @throws IOException
+     */
     private void updateConfig(PlayerDeathEvent event) throws IOException {
         OffsetDateTime now = OffsetDateTime.now();
 
@@ -88,6 +91,11 @@ public class PlayerDeathListener implements Listener {
     }
 
 
+    /**
+     * Announces the death to all players
+     *
+     * @param playerName player name
+     */
     private void announceDeath(String playerName) {
         Component title = Component.text(playerName + " has died!", NamedTextColor.DARK_RED);
         Component subtitle = Component.text("As such, the world will now end...", NamedTextColor.GRAY);
@@ -109,6 +117,12 @@ public class PlayerDeathListener implements Listener {
         }.runTaskLater(MultiplayerHc.getPlugin(MultiplayerHc.class), 20*30);
     }
 
+    /**
+     * Logs player deaths to a text file
+     *
+     * @param event
+     * @throws IOException
+     */
     private void logDeath(PlayerDeathEvent event) throws IOException {
         File dataFolder = Objects.requireNonNull(Bukkit.getPluginManager().getPlugin("MultiplayerHc")).getDataFolder();
 

@@ -11,6 +11,11 @@ public class PlayerJoinListener implements Listener {
 
     private static boolean spectatorOnLogin = false;
 
+    /**
+     * If the world is scheduled to reset, set everyone that joins to spectator mode and inform them of the reset.
+     *
+     * @param event
+     */
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         if (spectatorOnLogin) {
@@ -19,6 +24,11 @@ public class PlayerJoinListener implements Listener {
         }
     }
 
+    /**
+     * Method to enable/disable spectator on login functionality
+     *
+     * @param spectatorOnLogin enable/disable spectator
+     */
     public static void setSpectatorOnLogin(boolean spectatorOnLogin) {
         PlayerJoinListener.spectatorOnLogin = spectatorOnLogin;
     }

@@ -9,9 +9,13 @@ import java.nio.file.Paths;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Entrypoint for the standalone part of Multiplayer Hardcore.
+ * Used to perform world moving as this cannot be done at server runtime.
+ */
 public class Main {
-    private static OffsetDateTime now = OffsetDateTime.now();
-    private static DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+    private static final OffsetDateTime now = OffsetDateTime.now();
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
 
     public static void main(String[] args) throws IOException {
         System.out.println("Running in standalone mode");
@@ -28,9 +32,14 @@ public class Main {
         }
     }
 
+    /**
+     * Moves a given world folder to a destination directory.
+     * The worlds will be put in a folder inside the destination that uses the current time as the folder name.
+     *
+     * @param folder World folder
+     * @param dest Backup folder
+     */
     private static void moveWorld(Path folder, Path dest) {
-
-
         checkIfDirExists(dest);
         dest = Paths.get(dest.toAbsolutePath().toString() + "/" + formatter.format(now));
         checkIfDirExists(dest);
@@ -45,6 +54,11 @@ public class Main {
 
     }
 
+    /**
+     * Checks if a directory exists and if not tries to create it
+     *
+     * @param dir Directory
+     */
     private static void checkIfDirExists(Path dir) {
         if (!dir.toFile().exists()) {
             if (!dir.toFile().mkdir()) {
