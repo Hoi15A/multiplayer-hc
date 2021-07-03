@@ -8,6 +8,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Entrypoint for the standalone part of Multiplayer Hardcore.
@@ -16,9 +18,10 @@ import java.time.format.DateTimeFormatter;
 public class Main {
     private static final OffsetDateTime now = OffsetDateTime.now();
     private static final DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+    private static final Logger logger = Logger.getLogger(Main.class.getName());
 
     public static void main(String[] args) throws IOException {
-        System.out.println("Running in standalone mode");
+        logger.info("Running in standalone mode");
         String reset = ConfigManager.read("resetWorld");
         String worlds = ConfigManager.read("worldFolder");
         String backupDir = ConfigManager.read("backupFolder");
@@ -41,14 +44,14 @@ public class Main {
      */
     private static void moveWorld(Path folder, Path dest) {
         checkIfDirExists(dest);
-        dest = Paths.get(dest.toAbsolutePath().toString() + "/" + formatter.format(now));
+        dest = Paths.get(dest.toAbsolutePath() + "/" + formatter.format(now));
         checkIfDirExists(dest);
 
         try {
-            System.out.println("Moving " + dest.toString() + " to the backup folder.");
+            logger.log(Level.INFO, "Moving {0} to the backup folder.", dest);
             Files.move(folder, Paths.get(dest.toAbsolutePath().toString(), folder.getFileName().toString()));
         } catch (IOException e) {
-            System.out.println("Failed to move " + folder.toAbsolutePath());
+            logger.log(Level.SEVERE, "Failed to move {0}", folder.toAbsolutePath());
             e.printStackTrace();
         }
 
@@ -60,10 +63,8 @@ public class Main {
      * @param dir Directory
      */
     private static void checkIfDirExists(Path dir) {
-        if (!dir.toFile().exists()) {
-            if (!dir.toFile().mkdir()) {
-                System.out.println("Failed to create directory: " + dir.toAbsolutePath());
-            }
+        if (!dir.toFile().exists() && !dir.toFile().mkdir()) {
+            logger.log(Level.SEVERE, "Failed to create directory: {0}", dir.toAbsolutePath());
         }
     }
 }

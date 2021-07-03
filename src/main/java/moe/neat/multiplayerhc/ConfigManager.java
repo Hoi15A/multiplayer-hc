@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Objects;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 /**
  * Class for managing the plugins configuration file.
@@ -19,19 +20,17 @@ public class ConfigManager {
 
     private static final String CONFIG_DIR_NAME = "MultiplayerHc";
     private static final String CONFIG_FILE_NAME = "config.properties";
+    private static final Logger LOGGER = Logger.getLogger(ConfigManager.class.getName());
 
     private static final Properties prop = new Properties();
-
     private static final Path jar = Paths.get(Main.class.getProtectionDomain().getCodeSource().getLocation().getPath());
     private static final Path configDir = jar.getParent().resolve(CONFIG_DIR_NAME);
     private static final Path config = configDir.resolve(CONFIG_FILE_NAME);
 
     static {
 
-        if (!configDir.toFile().exists()) {
-            if (!configDir.toFile().mkdir()) {
-                System.out.println("Failed to create config dir.");
-            }
+        if (!configDir.toFile().exists() && !configDir.toFile().mkdir()) {
+            LOGGER.severe("Failed to create config dir.");
         }
 
         if (!config.toFile().exists()) {
@@ -52,16 +51,22 @@ public class ConfigManager {
         }
     }
 
+    private ConfigManager () {
+        throw new IllegalStateException("Utility class");
+    }
+
     /**
      * Stores a value to the config.properties file
      *
      * @param key The key that should be used
      * @param value The value that should be stored at said key
-     * @throws IOException
      */
     public static void save(String key, String value) throws IOException {
         prop.setProperty(key, value);
-        prop.store(Files.newOutputStream(config), null);
+
+        try (var stream = Files.newOutputStream(config)) {
+            prop.store(stream, null);
+        }
     }
 
     /**

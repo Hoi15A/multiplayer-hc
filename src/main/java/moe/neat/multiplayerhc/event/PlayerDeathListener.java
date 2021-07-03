@@ -14,6 +14,7 @@ import org.bukkit.GameMode;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
@@ -25,20 +26,17 @@ import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
+import java.util.logging.Logger;
 
 public class PlayerDeathListener implements Listener {
-
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM HH:mm");
     private static final String PLAYER_DIED = "%s has died!";
     private static final String WORLD_ENDING = "As such, the world will now end...";
     private static final String SECONDS_UNTIL_RESET = "The server will close in %s seconds and reset.";
     private static final String VOTESKIP_BTN = "\n[Click to voteskip]\n";
-    private static int SHUTDOWN_TIME;
-    // TODO: constant texts and delays either up here or config
+    private static final int SHUTDOWN_TIME = Integer.parseInt(ConfigManager.read("shutdownTime"));
 
-    public PlayerDeathListener() {
-        SHUTDOWN_TIME = Integer.parseInt(ConfigManager.read("shutdownTime"));
-    }
+    private static final Logger LOGGER = JavaPlugin.getPlugin(MultiplayerHc.class).getLogger();
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM HH:mm");
 
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) throws IOException {
@@ -55,7 +53,7 @@ public class PlayerDeathListener implements Listener {
 
         event.getEntity().getServer().sendMessage(skipButton);
 
-        MultiplayerHc.getPlugin(MultiplayerHc.class).shutDownServer(SHUTDOWN_TIME);
+        JavaPlugin.getPlugin(MultiplayerHc.class).shutDownServer(SHUTDOWN_TIME);
     }
 
     /**
@@ -98,14 +96,13 @@ public class PlayerDeathListener implements Listener {
             public void run() {
                 Bukkit.getServer().sendMessage(Component.text(String.format(SECONDS_UNTIL_RESET, SHUTDOWN_TIME)));
             }
-        }.runTaskLater(MultiplayerHc.getPlugin(MultiplayerHc.class), 20L * SHUTDOWN_TIME);
+        }.runTaskLater(JavaPlugin.getPlugin(MultiplayerHc.class), 20L * SHUTDOWN_TIME);
     }
 
     /**
      * Logs player deaths to a text file
      *
-     * @param event
-     * @throws IOException
+     * @param event the death event that should be logged
      */
     private void logDeath(PlayerDeathEvent event) throws IOException {
         File dataFolder = Objects.requireNonNull(Bukkit.getPluginManager().getPlugin("MultiplayerHc")).getDataFolder();
@@ -113,8 +110,8 @@ public class PlayerDeathListener implements Listener {
         var logPath = Paths.get(dataFolder.getPath(), "/deaths.log");
         var logFile = logPath.toFile();
 
-        if (!logFile.exists()) {
-            logFile.createNewFile();
+        if (!logFile.exists() && !logFile.createNewFile()) {
+            LOGGER.severe("Logfile creation failed");
         }
 
         String entry = GsonComponentSerializer.gson().serialize(Objects.requireNonNull(event.deathMessage())) + "\n";

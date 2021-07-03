@@ -27,13 +27,17 @@ public final class MultiplayerHc extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        var logger = getLogger();
+        logger.info("Setting up event listeners");
         setupEventListeners();
+        logger.info("Setting up commands");
         setupCommands();
+        logger.info("MultiplayerHC is ready to go!");
     }
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+        getLogger().info("Plugin disabled");
     }
 
     private void setupEventListeners() {
@@ -103,6 +107,6 @@ public final class MultiplayerHc extends JavaPlugin {
 
                 Bukkit.shutdown();
             }
-        }.runTaskLater(MultiplayerHc.getPlugin(MultiplayerHc.class), 20L * secondsDelay);
+        }.runTaskLater(getPlugin(MultiplayerHc.class), 20L * secondsDelay);
     }
 }

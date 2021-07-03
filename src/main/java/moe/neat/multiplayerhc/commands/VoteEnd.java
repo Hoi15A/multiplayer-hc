@@ -7,6 +7,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -60,7 +61,7 @@ public class VoteEnd implements BaseCommand {
         if (percentage >= 0.5) {
             sender.getServer().sendMessage(Component.text(VOTE_SUCCESS));
 
-            MultiplayerHc.getPlugin(MultiplayerHc.class).shutDownServer(10);
+            JavaPlugin.getPlugin(MultiplayerHc.class).shutDownServer(10);
         }
 
         sender.getServer();

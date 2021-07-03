@@ -13,8 +13,6 @@ public class PlayerJoinListener implements Listener {
 
     /**
      * If the world is scheduled to reset, set everyone that joins to spectator mode and inform them of the reset.
-     *
-     * @param event
      */
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
