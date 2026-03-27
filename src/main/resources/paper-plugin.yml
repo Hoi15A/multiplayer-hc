@@ -1,0 +1,9 @@
+name: MultiplayerHc
+version: "${version}"
+main: moe.neat.multiplayerhc.MultiplayerHc
+description: Deletes the world whenever somebody dies
+api-version: '1.21'
+prefix: MP-HC
+authors:
+  - Austin_Albrecht
+bootstrapper: moe.neat.multiplayerhc.MultiplayerHcBootstrap

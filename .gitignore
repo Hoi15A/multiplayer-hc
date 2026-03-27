@@ -1,5 +1,5 @@
-# Testerver
-server/
+# Test server
+# run/ is already ignored below
 
 # User-specific stuff
 .idea/
