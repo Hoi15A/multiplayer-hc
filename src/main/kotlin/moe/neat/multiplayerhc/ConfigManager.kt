@@ -13,7 +13,7 @@ import java.util.Properties
  * - Standalone (from bootstrapper): constructed with an explicit config path
  * - Plugin mode: constructed with the plugin's data folder
  */
-class ConfigManager(private val configDir: Path) {
+class ConfigManager(configDir: Path) {
 
     private val configFile: Path = configDir.resolve(CONFIG_FILE_NAME)
     private val props = Properties()
@@ -37,7 +37,6 @@ class ConfigManager(private val configDir: Path) {
 
     fun read(key: String): String? = props.getProperty(key)
 
-    @Throws(IOException::class)
     fun save(key: String, value: String) {
         props.setProperty(key, value)
         Files.newOutputStream(configFile).use { props.store(it, null) }

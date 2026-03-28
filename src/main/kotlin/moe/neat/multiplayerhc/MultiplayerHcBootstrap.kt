@@ -14,6 +14,7 @@ import java.util.logging.Logger
  * If a world reset is pending, backs up and deletes world folders
  * so the server generates fresh worlds on startup.
  */
+@Suppress("unused", "UnstableApiUsage")
 class MultiplayerHcBootstrap : PluginBootstrap {
 
     private val logger = Logger.getLogger("MultiplayerHc")
